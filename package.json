@@ -24,15 +24,20 @@
   },
   "homepage": "https://github.com/willrackley/IG-Explorer#readme",
   "devDependencies": {
-    "concurrently": "^4.1.0",
+    "concurrently": "^4.1.2",
     "nodemon": "^1.18.7"
   },
   "dependencies": {
     "axios": "^0.19.0",
+    "bcryptjs": "^2.4.3",
     "cheerio": "^1.0.0-rc.3",
     "express": "^4.16.4",
     "if-env": "^1.0.4",
-    "mongoose": "^5.4.22"
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.6.11",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0"
   },
   "engines": {
     "node": "11.7.0"

@@ -1,0 +1,21 @@
+.navbar {
+    border-bottom: 3px solid #FCE6CE !important;
+}
+
+.navbar-brand span {
+    font-family: 'Pacifico', cursive;
+    font-size: 24px;
+}
+
+.loginBtn {
+    color: rgb(26, 26, 26)
+}
+
+.loginBtn:hover {
+   background: #FCE6CE
+}
+
+
+
+
+

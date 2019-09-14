@@ -1,8 +1,10 @@
 const router = require("express").Router();
-const postRoutes = require("./posts");
+const influencersRoutes = require("./influencers");
 const scrapeRoutes = require("./scrape");
+const userRoutes = require("./users");
 
 // routes
-router.use("/posts", postRoutes);
+router.use("/influencers", influencersRoutes);
 router.use("/scrape", scrapeRoutes);
+router.use("/users", userRoutes)
 module.exports = router;

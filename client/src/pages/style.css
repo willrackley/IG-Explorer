@@ -1,0 +1,21 @@
+.catBtns:hover {
+    background: rgb(240, 240, 240);
+}
+
+.catBtns {
+    border: 2px solid rgb(194, 194, 194);
+    border-radius: 5px;
+}
+
+.card  {
+    transition: box-shadow .3s;
+    transition: all .3s ease-in-out; 
+    border: 2px solid #dfdfdf;
+}
+
+
+.card:hover {
+    box-shadow: 10px 15px 15px rgb(133, 122, 110);
+    z-index: 1000;
+    transform: scale(1.05);
+}
