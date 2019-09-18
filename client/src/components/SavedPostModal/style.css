@@ -1,0 +1,9 @@
+.modal-body {
+    height: 600px;
+    overflow-y: auto;
+  }
+
+  .iframeParent {
+    overflow-y: scroll !important;
+    height: 100%;
+}

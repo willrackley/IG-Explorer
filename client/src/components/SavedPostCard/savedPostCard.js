@@ -5,15 +5,15 @@ import "./style.css";
 
 export default function savePostCards(props) {
     return (
-        <div className="card-deck p-1">
+        <div className="card-deck ">
             {props.savedResults.map(result => (
-            <div className="savedPostCards card mt-2" style={{ minWidth: '18rem' }} key={result.postId} >
+            <div className="savedPostCards card mt-2" style={{ minWidth: '18rem', maxWidth: '24rem' }} key={result.postId} >
 
                 <div className="text-right font-weight-bold" ><button onClick={()=>props.deleteSavedPost(result.postId)} className="btn pr-3" >&times;</button></div>
                 
-                {result.video ? <div className="p-3 card-title title"><div className='row'><div className='col-10'><span className='pt-1 font-weight-bold'>{`@${result.username}`}</span></div><div className='col-2 text-right'><span className=''><IoIosVideocam size={30}/></span></div></div></div> : <div className="p-3 card-title title"><div className='row'><div className='col-10'><span className='pt-1 font-weight-bold'>{`@${result.username}`}</span></div><div className='col-2 text-right'><span className=''><IoIosCamera size={30}/></span></div></div></div>}
+                {result.video ? <div className="p-3 card-title title"><div className='row'><div className='col-10'><span className='pt-1 font-weight-bold'>{`@${result.username}`}</span></div><div className='col-2 text-right'><span className=''><IoIosVideocam style={{color: "#428bca"}} size={30}/></span></div></div></div> : <div className="p-3 card-title title"><div className='row'><div className='col-10'><span className='pt-1 font-weight-bold'>{`@${result.username}`}</span></div><div className='col-2 text-right'><span className=''><IoIosCamera  style={{color: "#428bca"}} size={30}/></span></div></div></div>}
                 
-                <a className="btn" data-toggle="modal" href={`https://www.instagram.com/p/${result.shortcode}`}   data-target={`#myModal${result.id}`} onClick={()=> { setTimeout(()=>console.clear(), 5000)}}>
+                <a className="btn" data-toggle="modal" href={`https://www.instagram.com/p/${result.shortcode}`}   data-target={`#myModal${result.postId}`} onClick={()=> { setTimeout(()=>console.clear(), 5000)}}>
                     <img  className="card-img-top" src={result.imageUrl} alt={`post by ${result.username}`}/>
                 </a>
                 <div className="card-body">

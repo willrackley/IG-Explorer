@@ -1,6 +1,6 @@
 /* eslint-disable no-loop-func */
 import axios from 'axios';
-import { SCRAPE_POSTS, RESET_COUNT, LOAD_MORE_COUNTS, LOAD_MORE_ALL, LOAD_MORE_IMG, LOAD_MORE_VID } from './types'
+import { SCRAPE_POSTS, RESET_COUNT, LOAD_MORE_COUNTS, LOAD_MORE_ALL, LOAD_MORE_IMG, LOAD_MORE_VID, UNFOUND_USER, RESET_UNFOUND_USER } from './types'
 import { uiStartLoading, uiStopLoading } from './index'
 let influencerArr = [];
 let allResultsArr = [];
@@ -15,7 +15,6 @@ export const getScrapedPosts = () => {
             for (let i = 0; i < res.data.length; i++) {
                 influencerArr.push(res.data[i].igName)
             }
-            
             dispatch(prelimFetch());
         })   
     }
@@ -23,12 +22,20 @@ export const getScrapedPosts = () => {
 
 export const getInfluencerPosts =()=> {
     return (dispatch, getState) => {
+        dispatch(resetUnfoundUser());
         let minRange = getState().ui.minRange;
         let maxRange = getState().ui.maxRange;
+        
+
         for  (let i = 0; i < influencerArr.length; i++) {
             axios.get(`/api/scrape/${influencerArr[i]}`)
             .then(res => {
-                if(res.data !== 'error') {
+                if(res.data === 'error') {
+                    let lostUser = {index: [i+1], user: influencerArr[i]};
+                    //console.log(influencerArr[i])
+                    dispatch(unfoundUser(lostUser))
+                    
+                } else {
                     for(let j = 0; j < res.data.length; j++) {
                         if ((res.data[j].is_video && res.data[j].video_view_count >= minRange && res.data[j].video_view_count <= maxRange) || (!res.data[j].is_video && res.data[j].edge_liked_by.count >= minRange && res.data[j].edge_liked_by.count <= maxRange)) {
                             allResultsArr.push(res.data[j])
@@ -40,14 +47,25 @@ export const getInfluencerPosts =()=> {
                             imgResultsArr.push(res.data[j])
                         }
                     }
-                } else {
-                    console.log(influencerArr[i])
                 }
                 
             })
         } 
     }
     
+}
+
+export const unfoundUser = (unfoundUser) => {
+    return {
+        type: UNFOUND_USER,
+        unfoundUser: unfoundUser
+    }
+}
+
+export const resetUnfoundUser = () => {
+    return {
+        type: RESET_UNFOUND_USER,
+    }
 }
 
 export const prelimFetch = () => {
@@ -78,14 +96,14 @@ export const asyncedFetch = () => {
                
             }
         }
-        
+
         dispatch(setPostData(allResultsArr, vidResultsArr, imgResultsArr))
         dispatch(uiStopLoading())
     }
 }
 
 export const setPostData = (allResultsArr, vidResultsArr, imgResultsArr) => {
-    console.log(allResultsArr)
+
     return (dispatch, getState) => {
         let countSlice = getState().scrapedPosts.counts;
         dispatch({

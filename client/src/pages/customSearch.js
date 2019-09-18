@@ -10,7 +10,7 @@ import { IoIosSearch } from 'react-icons/io'
 import { IoIosAdd } from 'react-icons/io'
 import { Link, Redirect } from "react-router-dom";
 import Card from '../components/Card/card'
-import { getUserData, logout, setRange, resetRange } from '../actions'
+import { getUserData, logout, setRange, resetRange, authSetToken } from '../actions'
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 let allResultsArr = [];
@@ -36,11 +36,23 @@ class customSearch extends Component {
         },
         inflErrorMessage: "",
         searchErrorMessage: "",
-        keyPress: null
+        signedIn: false
+    }
+
+    componentWillMount(){
+        let jwt = localStorage.getItem('jwt');
+        
+        if (jwt) {
+            this.props.authSetToken(jwt)
+            this.props.getUserData({ headers: {Authorization: `JWT ${jwt}` }})
+            setTimeout(this.setState({signedIn: true}),1000)
+        } else {
+           return
+        } 
     }
 
     componentDidMount(){
-        
+       
     }
 
     handleInputChange = (event) => {
@@ -213,8 +225,6 @@ class customSearch extends Component {
     }
 
     submitFilters = () => {
-        //this.props.resetCount();
-        
         this.groupSearch();
     }
 
@@ -239,10 +249,17 @@ class customSearch extends Component {
       });
     }
 
+    logout = () => {
+        this.props.logout()
+        this.setState({ signedIn: false })
+    }
+
     render() {
-        if (!this.props.auth.isSignedIn) {
-            return <Redirect to='/'/>
+
+        if (!this.state.signedIn) {
+            return <Redirect to="/"/>
         }
+
         return (
             <div>
                 <Nav>
@@ -250,11 +267,11 @@ class customSearch extends Component {
                         <a className="nav-link ml-auto dropdown-toggle" href="/" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <IoMdPerson></IoMdPerson>
                         </a>
-                        <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <div className="dropdown-menu dropdown-menu-lg-right  mr-lg-4" aria-labelledby="navbarDropdownMenuLink">
                             <Link className="dropdown-item" to="/">Home</Link>
                             <Link className="dropdown-item" to="/savedPosts">Saved Posts</Link>
                             {this.props.auth.userData && this.props.auth.userData.admin ? <Link className="dropdown-item" to="/admin">Admin</Link> : <span></span>}
-                            <button className="dropdown-item" onClick={() => this.props.logout()} >Log Out</button>
+                            <button className="dropdown-item" onClick={() => this.logout()} >Log Out</button>
                         </div>
                     </div> 
                 </Nav>
@@ -279,7 +296,7 @@ class customSearch extends Component {
                                     />
                                     <button 
                                     disabled={!this.state.usernameInput}
-                                    className="btn btn-secondary"
+                                    className="btn btn-primary"
                                     onClick={()=> this.submitSearch()}><IoIosSearch size={20}/></button>
                                 </div>
                             </form>
@@ -332,7 +349,7 @@ class customSearch extends Component {
                                                         </div>
                                                     </div>
                                                 </li>
-                                                <li className="dropdown-item">Category</li>
+                                                {/* <li className="dropdown-item">Category</li> */}
                                                 <div className='d-inline-flex resetbutton'>
                                                     <button className='btn dropdown-item'  onClick={()=>{this.resetFilters()}}>Reset</button>
                                                     <button className='btn dropdown-item' onClick={()=>this.submitFilters()}>Done</button>
@@ -357,7 +374,7 @@ class customSearch extends Component {
                         </div>
                         <div className='col-md-4 col-sm-12'>
                             <div className="text-right">
-                                <h5> Custom Group Search</h5>
+                                <h3 className="text-muted mb-3"> Custom Group Search</h3>
                                 <div className="mb-2 text-muted">Add an influencer to your list</div>
                                 <form  onSubmit={(event) => {event.preventDefault(); }}>
                                 <div className="input-group mb-3">
@@ -374,7 +391,7 @@ class customSearch extends Component {
                                     value={this.state.GSusernameInput}
                                     onChange={this.handleInputChange}
                                     />
-                                    <button className="btn btn-secondary" onClick={()=>this.addCSInfluencer()}>{this.state.isLoadingInflSearch ? <div className='text-center'><div className="spinner-border spinner-border-sm" role="status">
+                                    <button className="btn btn-primary" onClick={()=>this.addCSInfluencer()}>{this.state.isLoadingInflSearch ? <div className='text-center'><div className="spinner-border spinner-border-sm" role="status">
                                     <span className="sr-only">Loading...</span>
                                     </div></div> : <IoIosAdd size={20}/>}</button>
                                 </div>
@@ -386,11 +403,11 @@ class customSearch extends Component {
                                     <List>
                                         {this.props.auth.userData.influencers.map((result => (
                                         <div key={result.influencer} className="text-left p-1 ml-1">                    {result.influencer}
-                                            <button className="btn btn-secondary" onClick={() => this.deleteSavedInfluencer(result.influencer)}>&times;</button>
+                                            <button className="btn btn-primary" onClick={() => this.deleteSavedInfluencer(result.influencer)}>&times;</button>
                                         </div>)))}
                                     </List>
                                 </div>
-                                <button onClick={() => this.groupSearch()} className="btn btn-secondary">{this.state.isLoadingGroupSearch ? <div className='text-center'><div className="spinner-border spinner-border-sm" role="status">
+                                <button onClick={() => this.groupSearch()} className="btn btn-primary">{this.state.isLoadingGroupSearch ? <div className='text-center'><div className="spinner-border spinner-border-sm" role="status">
                                     <span className="sr-only">Loading...</span>
                                     </div></div> : "Search Group"}</button>
                             </div>
@@ -413,6 +430,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return{
         getUserData: (token) => dispatch(getUserData(token)),
+        authSetToken: (token) => dispatch(authSetToken(token)),
         setRange: (name, value) => dispatch(setRange(name, value)),
         resetRange: () => dispatch(resetRange()),
         logout: () => dispatch(logout())

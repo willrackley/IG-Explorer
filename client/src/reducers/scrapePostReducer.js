@@ -1,4 +1,4 @@
-import { SCRAPE_POSTS, LOAD_MORE_COUNTS, RESET_COUNT, LOAD_MORE_ALL, LOAD_MORE_VID, LOAD_MORE_IMG } from '../actions/types';
+import { SCRAPE_POSTS, LOAD_MORE_COUNTS, RESET_COUNT, LOAD_MORE_ALL, LOAD_MORE_VID, LOAD_MORE_IMG, UNFOUND_USER, RESET_UNFOUND_USER } from '../actions/types';
 
 const initialState = {
     filteredResults: [],
@@ -6,7 +6,8 @@ const initialState = {
     imageResults: [],
     allResults: [],
     hasMore: false,
-    counts: 10
+    counts: 10,
+    unfoundUser: [] 
 }
 
 const scrapePostReducer = (state = initialState, action) => {
@@ -68,6 +69,16 @@ const scrapePostReducer = (state = initialState, action) => {
             return {
                 ...state,
                 counts: action.counts
+            }
+        case UNFOUND_USER: 
+            return {
+                ...state,
+                unfoundUser: [...state.unfoundUser, action.unfoundUser]
+            }
+        case RESET_UNFOUND_USER: 
+            return {
+                ...state,
+                unfoundUser: []
             }
         default: 
             return state;

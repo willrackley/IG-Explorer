@@ -11,7 +11,7 @@ import { IoIosSearch } from 'react-icons/io';
 import { IoMdPerson } from 'react-icons/io';
 import { confirmAlert } from 'react-confirm-alert'; 
 import Nav from '../components/Nav/nav'
-import { getUserData, getScrapedPosts, loadMoreCounts, loadMoreAll, resetCount, loadMoreImg, loadMoreVid, setRange, resetRange, logout } from '../actions'
+import { getUserData, getScrapedPosts, loadMoreCounts, loadMoreAll, resetCount, loadMoreImg, loadMoreVid, setRange, resetRange, authSetToken, logout } from '../actions'
 import { connect } from "react-redux";
 import { Link } from "react-router-dom"
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -52,22 +52,15 @@ class Main extends Component {
         hashtags: ['music','rap','hiphop','beatmaker', 'raps', 'instarap', 'hiphopmusic', 'newrappers', 'song','musician','musicvideo', 'bestsongs', 'newsong', 'singing', 'instagrammusic', 'songs', 'guitar', 'slowsong', 'mixing', 'protools', 'singer', 'topsongs', 'popmusic', 'vocalist', 'producerlife', 'flstudio','production', 'beatmaking']
     }
     componentDidMount() {
+        let jwt = localStorage.getItem('jwt');
+        if (jwt) {
+            this.props.authSetToken(jwt)
+            this.props.getUserData({ headers: {Authorization: `JWT ${jwt}` }})
+           this.props.getScrapedPosts();
+        } else {
+            this.props.getScrapedPosts();
+        }
         
-        // let artist = { igName: "lilbaby_1", name: "lil baby", type: "rapper"}
-
-        // axios.post('/api/influencers/post', artist)
-        // .then(res => {
-        //     console.log(res)
-        // })
-        // axios.get('/api/influencers')
-        // .then(res => {
-        //     for (let i = 0; i < res.data.length; i++) {
-        //         influencerArr.push(res.data[i].igName)
-        //     }
-            
-        //     return this.getPosts();
-        // })   
-        this.props.getScrapedPosts();
     }
 
     fetchPostData = () => {
@@ -88,12 +81,10 @@ class Main extends Component {
             })
         }  
         if (this.props.auth.isSignedIn) {
-            //console.log(this.props.auth.userData.favorites)
             for (let k = 0; k < allResultsArr.length; k++) {
                 for (let l = 0; l < this.props.auth.userData.favorites.length; l++) {
                     if (this.props.auth.userData.favorites[l].shortcode === allResultsArr[k].shortcode ){
                         allResultsArr[k].style = true
-                        //console.log(allResultsArr[k])
                     }
                 }
                
@@ -115,7 +106,6 @@ class Main extends Component {
             hasMore: true,
             isLoading: false,
         }); 
-        
     }
 
     allResults = () => {
@@ -124,7 +114,6 @@ class Main extends Component {
             postType: "All",
         });
         this.props.loadMoreAll()
-        console.log(this.props.scrapedPosts.filteredResults)
      }
 
     showVidResults = () => {
@@ -144,81 +133,28 @@ class Main extends Component {
     }
 
     loadMore = () => {
-        //counts = counts + 10
         this.props.loadMoreCounts()
         setTimeout(()=>console.clear(), 5000)
         if (this.state.postType === "All") {
-            // this.setState({ filteredResults: this.state.allResults.slice(0, counts )})
             this.props.loadMoreAll()
-            // let allPostAmount = this.state.allResults.length
-            // if (counts > allPostAmount) {
-            //     this.setState({ hasMore: false })
-            // }
         }
         if (this.state.postType === "Video") {
             this.props.loadMoreVid()
-            // this.setState({ filteredResults: this.state.videoResults.slice(0, counts )})
-            // let vidPostAmount = this.state.videoResults.length
-            // if (counts > vidPostAmount) {
-            //     this.setState({ hasMore: false })
-            // }
         }
         if (this.state.postType === "Photo") {
             this.props.loadMoreImg();
-            // this.setState({ filteredResults: this.state.imageResults.slice(0, counts )})
-            // let postAmount = this.state.imageResults.length
-            // if (counts > postAmount) {
-            //     this.setState({ hasMore: false })
-            // }
         }
-    }
-
-    showInfluencerForm = () => {
-        this.setState({ addInfluencerForm : (<span>
-            
-            <form className='mt-5'>
-                <div className="form-group">
-                    <label htmlFor="exampleInputEmail1">Influencer's Name</label>
-                    <input type="text" className="form-control" id="name" aria-describedby="nameHelp" placeholder="Drake"/>
-                </div>
-                <div>
-                    <label htmlFor="exampleInput">Influencer's Instagram Name</label>
-                    <input type="text" className="form-control" id="igName" aria-describedby="nameHelp" placeholder="@Influencer"/>
-                </div>
-                <div className='mt-3'>
-                    <label htmlFor="exampleInput2">Influencer Category</label>
-                    <select className="form-control">
-                        <option>Rapper</option>
-                        <option>Singer</option>
-                        <option>Producer</option>
-                    </select>
-                </div>
-                
-            </form>
-            <button type="submit" className="btn btn-primary mt-3">Submit</button>
-            </span>
-            )
-        })
     }
 
     handleInputChange = event => {
         event.preventDefault()
         const { name, value } = event.target;
-        // this.setState({
-        //     [name]: value
-        // });
-        console.log(this.props.ui.minRange)
         this.props.setRange(name, value)
     };
 
     submitFilters = () => {
         this.props.resetCount();
-        // allResultsArr = [];
-        // vidResultsArr = [];
-        // imgResultsArr = [];
-        // this.getPosts()
         this.props.getScrapedPosts();
-        //console.log(this.state.minRange)
     }
 
     resetFilters = () => {
@@ -290,7 +226,6 @@ class Main extends Component {
             .then(res => {
                 this.props.getUserData({ headers: {Authorization: `JWT ${this.props.auth.token}` }})
                 if (res.data[0]) {
-                    console.log(res.data[0])
                 } else {
                     return;
                 }            
@@ -308,7 +243,7 @@ class Main extends Component {
                     <a className="nav-link ml-auto dropdown-toggle" href="/" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <IoMdPerson></IoMdPerson>
                     </a>
-                    <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <div className="dropdown-menu dropdown-menu-lg-right  mr-lg-4" aria-labelledby="navbarDropdownMenuLink">
                     <Link className="dropdown-item" to="/savedPosts">Saved Posts</Link>
                     <Link className="dropdown-item" to="/customSearch">Custom Search</Link>
                     {this.props.auth.userData && this.props.auth.userData.admin ? <Link className="dropdown-item" to="/admin">Admin</Link> : <span></span>}
@@ -316,6 +251,7 @@ class Main extends Component {
                     <button data-toggle="modal" data-target="#authModal" className="ml-auto btn loginBtn" >log in/ sign up </button> 
                 </div> }
                 </Nav>
+
                 <div className='container-fluid'>
                     <div className='row no-gutters'>
                         <div className=''>
@@ -335,11 +271,11 @@ class Main extends Component {
                                     <div className='container'>
                                     <div className='row px-1'>
                                         <div className='col-6'>
-                                            <h3 className="text-muted mb-3">{this.state.postType} Posts</h3>
+                                            <h3 className="text-muted mb-3 mainHeadingText">{this.state.postType} Posts</h3>
                                         </div>
                                         <div className='col-6 text-right'>
                                         <div className="dropdown">
-                                            <button className="btn btn-secondary dropdown-toggle" id="filterDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <button className="btn dropdown-toggle" id="filterDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 filter
                                             </button>
 
@@ -377,7 +313,7 @@ class Main extends Component {
                                                         </div>
                                                     </div>
                                                 </li>
-                                                <li className="dropdown-item">Category</li>
+                                                {/* <li className="dropdown-item">Category</li> */}
                                                 <div className='d-inline-flex resetbutton'>
                                                     <button className='btn dropdown-item'  onClick={()=>{this.resetFilters()}}>Reset</button>
                                                     <button className='btn dropdown-item' onClick={()=>this.submitFilters()}>Done</button>
@@ -406,7 +342,7 @@ class Main extends Component {
                                     >
                                     
                                     <List>
-                                        { <Card key={this.props.scrapedPosts.filteredResults.id} results={this.props.scrapedPosts.filteredResults} savePost={this.savePost} 
+                                        { <Card  results={this.props.scrapedPosts.filteredResults} savePost={this.savePost} 
                                         
                                          savedStyle={this.state.savedStyle} 
                                         />}
@@ -444,6 +380,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return{
         getUserData: (token) => dispatch(getUserData(token)),
+        authSetToken: (token) => dispatch(authSetToken(token)),
         getScrapedPosts: () => dispatch(getScrapedPosts()),
         loadMoreCounts: () => dispatch(loadMoreCounts()),
         loadMoreAll: () => dispatch(loadMoreAll()),

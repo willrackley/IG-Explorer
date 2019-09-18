@@ -14,3 +14,5 @@ export const LOAD_MORE_VID = "LOAD_MORE_VID";
 export const UI_MINRANGE = "UI_MINRANGE";
 export const UI_MAXRANGE = "UI_MAXRANGE";
 export const RESET_RANGE = "RESET_RANGE";
+export const UNFOUND_USER = "UNFOUND_USER";
+export const RESET_UNFOUND_USER = "RESET_UNFOUND_USER";

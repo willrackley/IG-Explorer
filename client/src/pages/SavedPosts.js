@@ -6,12 +6,24 @@ import { connect } from "react-redux";
 import { IoMdPerson } from 'react-icons/io';
 import { Link, Redirect } from "react-router-dom"
 import Axios from "axios";
-import Modal from "../components/PostModal/modal"
-import { getUserData, logout } from '../actions'
+import Modal from "../components/SavedPostModal/savedModal"
+import { getUserData, authSetToken, logout } from '../actions'
 
 
 class savedPosts extends Component {
     state = {
+        signedIn: false
+    }
+    componentWillMount(){
+        let jwt = localStorage.getItem('jwt');
+        
+        if (jwt) {
+            this.props.authSetToken(jwt)
+            this.props.getUserData({ headers: {Authorization: `JWT ${jwt}` }})
+            setTimeout(this.setState({signedIn: true}),1000)
+        } else {
+           return
+        } 
     }
 
     componentDidMount(){
@@ -26,22 +38,29 @@ class savedPosts extends Component {
         })
     }
 
+    logOut = () => {
+        this.props.logout()
+        this.setState({ signedIn: false })
+    }
+
     render() {
-        if (!this.props.auth.isSignedIn) {
-            return <Redirect to='/'/>
+
+        if (!this.state.signedIn) {
+            return <Redirect to="/"/>
         }
+
         return (
             <div>
-                <Nav>
+               <Nav>
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <a className="nav-link ml-auto dropdown-toggle" href="/" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <IoMdPerson></IoMdPerson>
                         </a>
-                        <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <div className="dropdown-menu dropdown-menu-lg-right  mr-lg-4" aria-labelledby="navbarDropdownMenuLink">
                             <Link className="dropdown-item" to="/">Home</Link>
                             <Link className="dropdown-item" to="/customSearch">Custom Search</Link>
                             {this.props.auth.userData && this.props.auth.userData.admin ? <Link className="dropdown-item" to="/admin">Admin</Link> : <span></span>}
-                            <button className="dropdown-item" onClick={() => this.props.logout()} >Log Out</button>
+                            <button className="dropdown-item" onClick={() => this.logOut()} >Log Out</button>
                         </div>
                     </div> 
                 </Nav>
@@ -58,6 +77,7 @@ class savedPosts extends Component {
                     </Modal>
                     </div>: <h3 className=" mt-5 text-center text-muted">You dont have any saved posts.</h3>}
                 </div>
+                
             </div>
         )
        
@@ -73,6 +93,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return{
         getUserData: (token) => dispatch(getUserData(token)),
+        authSetToken: (token) => dispatch(authSetToken(token)),
         logout: () => dispatch(logout())
     }
 }

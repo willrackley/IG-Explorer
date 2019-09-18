@@ -17,7 +17,7 @@ class cards extends React.Component {
     }
     
     componentDidMount() {
-        this.setState({ contId: [] })
+        setTimeout(()=>console.clear(), 5000) 
     }
     
     handleSaveBtn = (result,index) => {
@@ -59,15 +59,16 @@ class cards extends React.Component {
     return (
         <div className="card-deck p-1">
             {this.props.results.map((result,index) => (
-            <div className="mainCards card mt-2 mb-5" style={{ minWidth: '16rem' }} key={result.id}  >
-                {result.is_video ? <div className="p-3 card-title title"><div className='row'><div className='col-md-10 col-sm-12'><span className='pt-1 font-weight-bold'>{`@${result.owner.username}`}</span></div><div className='col-md-2 col-sm-12 '><span className=''><IoIosVideocam size={30}/></span></div></div></div> : <div className="p-3 card-title title"><div className='row'><div className='col-md-10 col-sm-12'><span className='pt-1 font-weight-bold'>{`@${result.owner.username}`}</span></div><div className='col-md-2 col-sm-12 text-sm-lefts'><span className=''><IoIosCamera size={30}/></span></div></div></div>}
+            <div className="mainCards card mt-2 mb-5" style={{ minWidth: '16rem'}} key={result.id}  >
+                {result.is_video ? <div className="p-3 card-title title"><div className='row'><div className='col-md-10 col-sm-12'><span className='pt-1 font-weight-bold'>{`@${result.owner.username}`}</span></div><div className='col-md-2 col-sm-12 '><span className=''><IoIosVideocam style={{color: "#428bca"}} size={30}/></span></div></div></div> : <div className="p-3 card-title title"><div className='row'><div className='col-md-10 col-sm-12'><span className='pt-1 font-weight-bold'>{`@${result.owner.username}`}</span></div><div className='col-md-2 col-sm-12 text-sm-lefts'><span className=''><IoIosCamera style={{color: "#428bca"}} size={30}/></span></div></div></div>}
 
                 
                 <div className='text-center'>
                     {result.edge_media_to_caption.edges[0] ? <button  className='btn heart' style={this.state.selectedId === result.id || result.style || this.state.contId.includes(result.id) ? {color: 'red'} : null} onClick={()=> this.handleSaveBtn(result,index)}>{this.state.selectedId === result.id || result.style || this.state.contId.includes(result.id) ? <span>Saved<IoMdHeart size={30}></IoMdHeart></span> : <span><IoMdHeart size={30}></IoMdHeart></span>}</button> : <button className='btn heart' style={this.state.selectedId === result.id || result.style || this.state.contId.includes(result.id) ? {color: 'red'} : null} onClick={()=> this.handleSaveBtn(result,index)}>{this.state.selectedId === result.id || result.style || this.state.contId.includes(result.id) ? <span>Saved<IoMdHeart size={30}></IoMdHeart></span> : <span><IoMdHeart size={30}></IoMdHeart></span>}</button>}
                 </div>
                 
-                <a className="btn" data-toggle="modal" href={`https://www.instagram.com/p/${result.shortcode}`}   data-target={`#myModal${result.id}`} onClick={()=> { setTimeout(()=>console.clear(), 5000)}}>
+                <a className="btn" data-toggle="modal" href={`https://www.instagram.com/p/${result.shortcode}`} onClick={()=> {setTimeout(()=>console.clear(), 5000) }}  data-target={`#myModal${result.id}`} >
+                
                     <img  className="card-img-top" src={result.display_url} alt={`post by ${result.owner.username}`}/>
                 </a>
                 <div className="card-body">

@@ -1,4 +1,8 @@
 .switchBtn {
+    border: 3px solid #FCE6CE
+}
+
+.switchBtn:hover {
     background: #FCE6CE
 }
 

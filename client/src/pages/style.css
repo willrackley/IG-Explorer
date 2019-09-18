@@ -1,9 +1,10 @@
 .catBtns:hover {
-    background: rgb(240, 240, 240);
+    background: rgb(224,224,224) !important;
+    background: radial-gradient(circle, rgba(255,255,255,1) 50%, rgba(245,245,245,1) 80%)!important;
 }
 
 .catBtns {
-    border: 2px solid rgb(194, 194, 194);
+    border: 2px solid rgb(218, 218, 218);
     border-radius: 5px;
 }
 
@@ -13,9 +14,17 @@
     border: 2px solid #dfdfdf;
 }
 
-
 .card:hover {
     box-shadow: 10px 15px 15px rgb(133, 122, 110);
-    z-index: 1000;
+    z-index: 1;
     transform: scale(1.05);
+    border: 2px solid #FCE6CE;
+}
+
+#filterDropdown:hover {
+    background: #FCE6CE;
+}
+
+.mainHeadingText {
+    font-family: 'Roboto', sans-serif;
 }

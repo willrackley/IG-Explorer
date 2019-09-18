@@ -27,8 +27,7 @@ router.get("/:user", function(req, res) {
       let finalArraySplit = thirdSplitArray.split('}},{"node":{"__typename":');  
       //let secondFinalSplit= finalArraySplit.split('},"edges":[{"node":{"__typename":')
       //console.log(finalArraySplit)
-      //console.log(finalArraySplit[0])
-      //console.log(finalArraySplit[0].charAt(2511))
+      //console.log(finalArraySplit)
       for (let i = 0 ; i < finalArraySplit.length; i++) {
         if (finalArraySplit[i].includes('"GraphSidecar",')) {
             let newItem = finalArraySplit[i].replace('"GraphSidecar",',"") 
@@ -88,8 +87,10 @@ router.get("/:user", function(req, res) {
         }
         //console.log(finalArraySplit[i])
       }
-
-     //console.log(postArray)
+    
+      //filtering out all possible duplicates
+      postArray = postArray.filter((item, index, self) => self.findIndex(t => t.id === item.id) === index)
+    
     res.json(postArray)
     })
     .catch(err => res.json('error'))

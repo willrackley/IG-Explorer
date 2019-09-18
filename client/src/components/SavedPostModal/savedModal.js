@@ -2,7 +2,7 @@ import React from "react";
 import './style.css'
 
 
-class modal extends React.Component {
+class savedModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = { 
@@ -12,13 +12,12 @@ class modal extends React.Component {
 
     componentDidMount(){
         //console.clear()
+    
     }
 
-    
-
     stopVideo = (id,index) => {
-       let embedded = document.getElementsByClassName("embed");
-       embedded[index].src = `https://www.instagram.com/p/${id.shortcode}/embed`
+       let iframe = document.getElementsByClassName("embed-responsive-item");
+       iframe[index].src = `https://www.instagram.com/p/${id.shortcode}/embed/`
     }
 
     render(){
@@ -35,7 +34,7 @@ class modal extends React.Component {
             <div>
                 {this.props.mappedModal.map((newModal,index) => (
                 
-                <div key={newModal.id} className="modal myModal fade" id={`myModal${newModal.id}`} tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+                <div key={newModal.postId} className="modal myModal fade" id={`myModal${newModal.postId}`} tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
                 <div className="modal-dialog modal-dialog-scrollable" role="document">
                     <div className="modal-content">
                         <div className="modal-header" >
@@ -45,10 +44,8 @@ class modal extends React.Component {
                         </div>
                         <div className="modal-body">
                             <div className=" iframeParent embed-responsive embed-responsive-1by1 z-depth-1-half">
-                            {/* <embed className="embed" src={`https://www.instagram.com/p/${newModal.shortcode}/embed`}/> */}
-                                <iframe title={newModal.owner.username} className="embed embed-responsive-item" src={`https://www.instagram.com/p/${newModal.shortcode}/embed`} ></iframe>
+                                <iframe id={`video${newModal.id}`} title={newModal.username} className="embed-responsive-item" src={`https://www.instagram.com/p/${newModal.shortcode}/embed/`} ></iframe> 
                             </div>   
-                            
                         </div>
                         <div className="modal-footer">
                             <a href={`https://www.instagram.com/p/${newModal.shortcode}`} className="btn" target="_blank" rel="noopener noreferrer"> view post </a>
@@ -63,4 +60,4 @@ class modal extends React.Component {
     }
 }
         
- export default modal;           
+ export default savedModal;           

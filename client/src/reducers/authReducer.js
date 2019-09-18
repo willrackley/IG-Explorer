@@ -1,8 +1,15 @@
 import { AUTH_SET_TOKEN, AUTH_SET_USER_DATA, AUTH_RESET_STATE} from "../actions/types"
 
+
 const initialState = {
     token: null,
-    userData: null,
+    userData:{
+        id: "",
+        email: "",
+        favorites: [],
+        influencers: [],
+        admin: false
+    },
     isSignedIn: false
 }
 
@@ -23,7 +30,13 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 token: null,
-                userData: null,
+                userData:{
+                    id: "",
+                    email: "",
+                    favorites: [],
+                    influencers: [],
+                    admin: false
+                },
                 isSignedIn: false
             };
         default: 
