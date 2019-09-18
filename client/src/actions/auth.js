@@ -3,7 +3,7 @@ import { AUTH_SET_TOKEN, AUTH_SET_USER_DATA, AUTH_REMOVE_TOKEN, AUTH_RESET_STATE
 import { getScrapedPosts } from './scrapedPosts'
 
 
-
+// const functions for auth
 export const tryAuth = (authData) => {
     return dispatch => {
         axios.post('api/users/signin', authData)
