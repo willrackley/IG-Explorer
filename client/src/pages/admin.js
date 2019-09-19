@@ -193,7 +193,7 @@ class adminPage extends Component {
                     </div> 
                 </Nav>
                 <div className="container my-5">
-                    <div className="row">
+                    <div className="row flex-column-reverse flex-md-row">
                         <div className="col-md-8 col-sm-12 border-right">
                             {this.state.isLoading ? <div className='text-center'><div className="spinner-border spinner-border-sm" role="status">
                                 <span className="sr-only">Loading...</span>
@@ -228,7 +228,7 @@ class adminPage extends Component {
                             </table>
                             </div>}
                         </div>
-                        <div className="col-md-4 col-sm-12">
+                        <div className="col-md-4 col-sm-12 mb-5">
                             <h3>Add an influencer</h3>
                                 <form  onSubmit={(event) => {event.preventDefault(); }}>
                                     <div className="input-group mb-3">

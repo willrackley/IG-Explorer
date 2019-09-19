@@ -276,7 +276,7 @@ class customSearch extends Component {
                     </div> 
                 </Nav>
                 <div className="container">
-                    <div className='row my-5 flex-column-reverse flex-lg-row'>
+                    <div className='row my-5 flex-column-reverse flex-md-row'>
                         <div className='col-md-8 border-right col-sm-12'>
                             <h3 className="text-muted mb-3">Search</h3>
                             <form onSubmit={(event) => {event.preventDefault(); this.submitSearch();}}>
