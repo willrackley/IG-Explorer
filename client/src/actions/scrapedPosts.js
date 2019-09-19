@@ -23,8 +23,10 @@ export const getScrapedPosts = () => {
 export const getInfluencerPosts =()=> {
     return (dispatch, getState) => {
         dispatch(resetUnfoundUser());
-        let minRange = getState().ui.minRange;
-        let maxRange = getState().ui.maxRange;
+        let minRangeLikes = getState().ui.minRangeLikes;
+        let maxRangeLikes = getState().ui.maxRangeLikes;
+        let minRangeViews = getState().ui.minRangeViews;
+        let maxRangeViews = getState().ui.maxRangeViews;
         
 
         for  (let i = 0; i < influencerArr.length; i++) {
@@ -37,13 +39,13 @@ export const getInfluencerPosts =()=> {
                     
                 } else {
                     for(let j = 0; j < res.data.length; j++) {
-                        if ((res.data[j].is_video && res.data[j].video_view_count >= minRange && res.data[j].video_view_count <= maxRange) || (!res.data[j].is_video && res.data[j].edge_liked_by.count >= minRange && res.data[j].edge_liked_by.count <= maxRange)) {
+                        if ((res.data[j].is_video && res.data[j].video_view_count >= minRangeViews && res.data[j].video_view_count <= maxRangeViews && res.data[j].edge_liked_by.count >= minRangeLikes && res.data[j].edge_liked_by.count <= maxRangeLikes) || (!res.data[j].is_video && res.data[j].edge_liked_by.count >= minRangeLikes && res.data[j].edge_liked_by.count <= maxRangeLikes)) {
                             allResultsArr.push(res.data[j])
                         }
-                        if(res.data[j].is_video && res.data[j].video_view_count >= minRange && res.data[j].video_view_count <= maxRange) {
+                        if(res.data[j].is_video && res.data[j].video_view_count >= minRangeViews && res.data[j].video_view_count <= maxRangeViews && res.data[j].edge_liked_by.count >= minRangeLikes && res.data[j].edge_liked_by.count <= maxRangeLikes) {
                             vidResultsArr.push(res.data[j])
                         }
-                        if(!res.data[j].is_video && res.data[j].edge_liked_by.count >= minRange &&  res.data[j].edge_liked_by.count <= maxRange) {
+                        if(!res.data[j].is_video && res.data[j].edge_liked_by.count >= minRangeLikes &&  res.data[j].edge_liked_by.count <= maxRangeLikes) {
                             imgResultsArr.push(res.data[j])
                         }
                     }

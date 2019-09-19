@@ -1,4 +1,4 @@
-import { UI_START_LOADING, UI_STOP_LOADING, UI_MINRANGE, UI_MAXRANGE, RESET_RANGE } from './types';
+import { UI_START_LOADING, UI_STOP_LOADING, UI_MINRANGE_VIEWS, UI_MAXRANGE_VIEWS, RESET_RANGE, UI_MINRANGE_LIKES, UI_MAXRANGE_LIKES } from './types';
 
 export const uiStartLoading = () => {
     return {
@@ -13,17 +13,28 @@ export const uiStopLoading = () => {
 }
 
 export const setRange = (name,value) => {
-    if (name === 'minRange') {
+    if (name === 'minRangeLikes') {
         return dispatch => {
-            dispatch({type: UI_MINRANGE,
+            dispatch({type: UI_MINRANGE_LIKES,
             range: value})
         }
-    } else if (name === 'maxRange') {
+    } else if (name === 'maxRangeLikes') {
         return dispatch => {
-            dispatch({type: UI_MAXRANGE,
+            dispatch({type: UI_MAXRANGE_LIKES,
+                range: value})
+        }
+    } else if (name === 'minRangeViews') {
+        return dispatch => {
+            dispatch({type: UI_MINRANGE_VIEWS,
+                range: value})
+        }
+    } else if (name === 'maxRangeViews') {
+        return dispatch => {
+            dispatch({type: UI_MAXRANGE_VIEWS,
                 range: value})
         }
     }
+
 }
 
 export const resetRange = () => {

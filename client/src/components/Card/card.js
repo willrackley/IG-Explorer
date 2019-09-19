@@ -75,7 +75,9 @@ class cards extends React.Component {
                 
                     {
                         result.is_video ?
-                        <div><span className="font-weight-bold">{result.video_view_count}</span> views</div> :
+                        <div className="mb-2"><div><span className="font-weight-bold">{result.video_view_count}</span> views</div> 
+                        <div><span className="font-weight-bold">{result.edge_liked_by.count}</span> likes</div></div>
+                        :
                         <div>Liked by <span className="font-weight-bold">{result.edge_liked_by.count}</span> others</div>
                     }
                     {result.edge_media_to_caption.edges[0] ? <span><span className="font-weight-bold">{result.owner.username}</span>

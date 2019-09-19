@@ -25,12 +25,16 @@
     background: #FCE6CE;
 }
 
+.filterSection {
+    border-bottom: 2px solid #FCE6CE;
+}
+
 .mainHeadingText {
     font-family: 'Roboto', sans-serif;
 }
 
 .groupSearchBox {
-    height: 400px;
+    height: 200px;
 }
 
 /* smartphone width */

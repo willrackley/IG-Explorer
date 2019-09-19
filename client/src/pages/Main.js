@@ -13,7 +13,8 @@ import { confirmAlert } from 'react-confirm-alert';
 import Nav from '../components/Nav/nav'
 import { getUserData, getScrapedPosts, loadMoreCounts, loadMoreAll, resetCount, loadMoreImg, loadMoreVid, setRange, resetRange, authSetToken, logout } from '../actions'
 import { connect } from "react-redux";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
+import NumberFormat from 'react-number-format';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import './style.css'
 let vidResultsArr = [];
@@ -235,6 +236,11 @@ class Main extends Component {
     }
 
     render() {
+    
+        //prevents scrolling the number in filter form
+        window.$(document).on("wheel", "input[type=number]", function (e) {
+            window.$(this).blur();
+        });
         
         return (
             <div>
@@ -281,31 +287,54 @@ class Main extends Component {
 
                                             <ul className="dropdown-menu" aria-labelledby="filterDropdown">
                                                 <li className="dropdown-item">
-                                                    <div >
-                                                        <h5>Views / Likes</h5>
+                                                    <div className="filterSection mb-3">
+                                                        <h5 className="text-primary">Likes</h5>
                                                         <div>
                                                             <form>
-                                                                <div className="form-group">
-                                                                    <label htmlFor="minRange">min {this.props.ui.minRange}</label>
+                                                                <div className="form-group mb-2">
+                                                                    <label htmlFor="minRangeLikes">MIN <NumberFormat value={this.props.ui.minRangeLikes} displayType={'text'} thousandSeparator={true} /></label>
                                                                     <input
-                                                                        type="range"
-                                                                        className="form-control-range"
-                                                                        name="minRange"
-                                                                        min={25000}
-                                                                        step={25000}
-                                                                        max={this.props.ui.maxRange}
-                                                                        value={this.props.ui.minRange}
+                                                                        type="number"
+                                                                        className="form-control"
+                                                                        name="minRangeLikes"
+                                                                        value={this.props.ui.minRangeLikes}
                                                                         onChange={this.handleInputChange}
                                                                     />
-                                                                    <label htmlFor="maxRange">max {this.props.ui.maxRange}</label>
+                                                                </div>
+                                                                <div className="form-group">
+                                                                    <label htmlFor="maxRangeLikes">MAX <NumberFormat value={this.props.ui.maxRangeLikes} displayType={'text'} thousandSeparator={true} /></label>
                                                                     <input
-                                                                        type="range"
-                                                                        className="form-control-range"
-                                                                        name="maxRange"
-                                                                        min={this.props.ui.minRange}
-                                                                        step={25000}
-                                                                        max={20000000}
-                                                                        value={this.props.ui.maxRange}
+                                                                        type="number"
+                                                                        className="form-control"
+                                                                        name="maxRangeLikes"
+                                                                        value={this.props.ui.maxRangeLikes}
+                                                                        onChange={this.handleInputChange}
+                                                                    />
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                    <div className="filterSection mb-3">
+                                                        <h5 className="text-primary">Views</h5>
+                                                        <div>
+                                                            <form>
+                                                                <div className="form-group mb-2">
+                                                                    <label htmlFor="minRangeViews">MIN <NumberFormat value={this.props.ui.minRangeViews} displayType={'text'} thousandSeparator={true} /></label>
+                                                                    <input
+                                                                        type="number"
+                                                                        className="form-control"
+                                                                        name="minRangeViews"
+                                                                        value={this.props.ui.minRangeViews}
+                                                                        onChange={this.handleInputChange}
+                                                                    />
+                                                                </div>
+                                                                <div className="form-group">
+                                                                    <label htmlFor="maxRangeViews">MAX <NumberFormat value={this.props.ui.maxRangeViews} displayType={'text'} thousandSeparator={true} /></label>
+                                                                    <input
+                                                                        type="number"
+                                                                        className="form-control"
+                                                                        name="maxRangeViews"
+                                                                        value={this.props.ui.maxRangeViews}
                                                                         onChange={this.handleInputChange}
                                                                     />
                                                                 </div>
@@ -316,7 +345,7 @@ class Main extends Component {
                                                 {/* <li className="dropdown-item">Category</li> */}
                                                 <div className='d-inline-flex resetbutton'>
                                                     <button className='btn dropdown-item'  onClick={()=>{this.resetFilters()}}>Reset</button>
-                                                    <button className='btn dropdown-item' onClick={()=>this.submitFilters()}>Done</button>
+                                                    <button className='btn dropdown-item' onClick={()=>this.submitFilters()}>Save</button>
                                                 </div>
                                                 
                                             </ul>

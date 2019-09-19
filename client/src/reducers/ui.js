@@ -1,9 +1,11 @@
-import { UI_START_LOADING, UI_STOP_LOADING, UI_MAXRANGE, UI_MINRANGE, RESET_RANGE } from '../actions/types';
+import { UI_START_LOADING, UI_STOP_LOADING, UI_MAXRANGE_LIKES, UI_MINRANGE_LIKES, UI_MAXRANGE_VIEWS, UI_MINRANGE_VIEWS, RESET_RANGE } from '../actions/types';
 
 const initialState = {
     isLoading: false,
-    minRange: 100000,
-    maxRange: 1000000,
+    minRangeLikes: 20000,
+    maxRangeLikes: 1000000,
+    minRangeViews: 100000,
+    maxRangeViews: 1000000
 };
 
 const uiReducer = (state = initialState, action) => {
@@ -18,21 +20,33 @@ const uiReducer = (state = initialState, action) => {
                 ...state,
                 isLoading: false
             };
-        case UI_MINRANGE:
+        case UI_MINRANGE_LIKES:
             return {
                 ...state,
-                minRange: action.range
+                minRangeLikes: action.range
             };
-        case UI_MAXRANGE:
+        case UI_MAXRANGE_LIKES:
             return {
                 ...state,
-                maxRange: action.range
+                maxRangeLikes: action.range
+            };
+        case UI_MINRANGE_VIEWS:
+            return {
+                ...state,
+                minRangeViews: action.range
+            };
+        case UI_MAXRANGE_VIEWS:
+            return {
+                ...state,
+                maxRangeViews: action.range
             };
         case RESET_RANGE:
             return {
                 ...state,
-                minRange: 100000,
-                maxRange: 1000000
+                minRangeLikes: 20000,
+                maxRangeLikes: 1000000,
+                minRangeViews: 100000,
+                maxRangeViews: 1000000
             };
         default:
             return state;

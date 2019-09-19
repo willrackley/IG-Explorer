@@ -13,6 +13,7 @@ import Card from '../components/Card/card'
 import { getUserData, logout, setRange, resetRange, authSetToken } from '../actions'
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import NumberFormat from 'react-number-format';
 let allResultsArr = [];
 
 class customSearch extends Component {
@@ -69,7 +70,7 @@ class customSearch extends Component {
 
     submitSearch = ()=> {
         this.setState({ isLoading: true })
-        axios.get(`/api/scrape/${this.state.usernameInput}`)
+        axios.get(`/api/scrape/${this.state.usernameInput.toLowerCase()}`)
         .then(res => {
             if (res.data !== 'error') {
                 this.setState({
@@ -84,7 +85,6 @@ class customSearch extends Component {
                     filteredResults: []
                 })
             }
-            console.log(res.data)
         })
     }
 
@@ -133,10 +133,10 @@ class customSearch extends Component {
         //check if user is valid
         //event.preventDefault();
         this.setState({ isLoadingInflSearch: true })
-        axios.get(`/api/scrape/${this.state.GSusernameInput}`)
+        axios.get(`/api/scrape/${this.state.GSusernameInput.toLowerCase()}`)
         .then(res => {
             console.log(res.data)
-            let searchedUser = { influencer: this.state.GSusernameInput }
+            let searchedUser = { influencer: this.state.GSusernameInput.toLowerCase() }
             if (res.data !== 'error') {
                 axios.put(`api/users/saveGroupedInfluencer/${this.props.auth.userData.id}`, searchedUser)
                 .then(GIresponse => {
@@ -201,7 +201,7 @@ class customSearch extends Component {
             .then(res => {
                 if(res.data !== 'error') {
                     for(let j = 0; j < res.data.length; j++) {
-                        if ((res.data[j].is_video && res.data[j].video_view_count >= this.props.ui.minRange && res.data[j].video_view_count <= this.props.ui.maxRange) || (!res.data[j].is_video && res.data[j].edge_liked_by.count >= this.props.ui.minRange && res.data[j].edge_liked_by.count <= this.props.ui.maxRange)) {
+                        if ((res.data[j].is_video && res.data[j].video_view_count >= this.props.ui.minRangeViews && res.data[j].video_view_count <= this.props.ui.maxRangeViews && res.data[j].edge_liked_by.count >= this.props.ui.minRangeLikes && res.data[j].edge_liked_by.count <= this.props.ui.maxRangeLikes) || (!res.data[j].is_video && res.data[j].edge_liked_by.count >= this.props.ui.minRangeLikes && res.data[j].edge_liked_by.count <= this.props.ui.maxRangeLikes)) {
                             allResultsArr.push(res.data[j])
                         }
                     }
@@ -236,8 +236,7 @@ class customSearch extends Component {
             label: 'Yes',
             onClick: () => {
                 this.props.resetRange()
-                // this.props.resetCount()
-                // this.props.getScrapedPosts()
+                this.groupSearch();
             }
           },
           {
@@ -316,31 +315,54 @@ class customSearch extends Component {
 
                                             <ul className="dropdown-menu" aria-labelledby="filterDropdown">
                                                 <li className="dropdown-item">
-                                                    <div >
-                                                        <h5>Views / Likes</h5>
+                                                <div className="filterSection mb-3">
+                                                        <h5 className="text-primary">Likes</h5>
                                                         <div>
                                                             <form>
-                                                                <div className="form-group">
-                                                                    <label htmlFor="minRange">min {this.props.ui.minRange}</label>
+                                                                <div className="form-group mb-2">
+                                                                    <label htmlFor="minRangeLikes">MIN <NumberFormat value={this.props.ui.minRangeLikes} displayType={'text'} thousandSeparator={true} /></label>
                                                                     <input
-                                                                        type="range"
-                                                                        className="form-control-range"
-                                                                        name="minRange"
-                                                                        min={25000}
-                                                                        step={25000}
-                                                                        max={this.props.ui.maxRange}
-                                                                        value={this.props.ui.minRange}
+                                                                        type="number"
+                                                                        className="form-control"
+                                                                        name="minRangeLikes"
+                                                                        value={this.props.ui.minRangeLikes}
                                                                         onChange={this.handleInputChange}
                                                                     />
-                                                                    <label htmlFor="maxRange">max {this.props.ui.maxRange}</label>
+                                                                </div>
+                                                                <div className="form-group">
+                                                                    <label htmlFor="maxRangeLikes">MAX <NumberFormat value={this.props.ui.maxRangeLikes} displayType={'text'} thousandSeparator={true} /></label>
                                                                     <input
-                                                                        type="range"
-                                                                        className="form-control-range"
-                                                                        name="maxRange"
-                                                                        min={this.props.ui.minRange}
-                                                                        step={25000}
-                                                                        max={20000000}
-                                                                        value={this.props.ui.maxRange}
+                                                                        type="number"
+                                                                        className="form-control"
+                                                                        name="maxRangeLikes"
+                                                                        value={this.props.ui.maxRangeLikes}
+                                                                        onChange={this.handleInputChange}
+                                                                    />
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                    <div className="filterSection mb-3">
+                                                        <h5 className="text-primary">Views</h5>
+                                                        <div>
+                                                            <form>
+                                                                <div className="form-group mb-2">
+                                                                    <label htmlFor="minRangeViews">MIN <NumberFormat value={this.props.ui.minRangeViews} displayType={'text'} thousandSeparator={true} /></label>
+                                                                    <input
+                                                                        type="number"
+                                                                        className="form-control"
+                                                                        name="minRangeViews"
+                                                                        value={this.props.ui.minRangeViews}
+                                                                        onChange={this.handleInputChange}
+                                                                    />
+                                                                </div>
+                                                                <div className="form-group">
+                                                                    <label htmlFor="maxRangeViews">MAX <NumberFormat value={this.props.ui.maxRangeViews} displayType={'text'} thousandSeparator={true} /></label>
+                                                                    <input
+                                                                        type="number"
+                                                                        className="form-control"
+                                                                        name="maxRangeViews"
+                                                                        value={this.props.ui.maxRangeViews}
                                                                         onChange={this.handleInputChange}
                                                                     />
                                                                 </div>
@@ -351,7 +373,7 @@ class customSearch extends Component {
                                                 {/* <li className="dropdown-item">Category</li> */}
                                                 <div className='d-inline-flex resetbutton'>
                                                     <button className='btn dropdown-item'  onClick={()=>{this.resetFilters()}}>Reset</button>
-                                                    <button className='btn dropdown-item' onClick={()=>this.submitFilters()}>Done</button>
+                                                    <button className='btn dropdown-item' onClick={()=>this.submitFilters()}>Save</button>
                                                 </div>
                                                 
                                             </ul>

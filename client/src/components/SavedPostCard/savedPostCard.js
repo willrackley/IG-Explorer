@@ -19,7 +19,8 @@ export default function savePostCards(props) {
                 <div className="card-body">
                     {
                         result.video ?
-                        <div><span className="font-weight-bold">{result.views}</span> views</div> :
+                        <div className="mb-2"><div><span className="font-weight-bold">{result.views}</span> views</div> <div><span className="font-weight-bold">{result.likes}</span> likes</div></div>
+                        :
                         <div>Liked by <span className="font-weight-bold">{result.likes}</span> others</div>
                     }
                     <span><span className="font-weight-bold">{result.username}</span>
