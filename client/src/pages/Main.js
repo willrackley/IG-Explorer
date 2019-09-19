@@ -346,6 +346,7 @@ class Main extends Component {
                                                         </div>
                                                     </div>
                                                 </li>
+                                                
                                                 {/* <li className="dropdown-item">Category</li> */}
                                                 <div className='d-inline-flex resetbutton'>
                                                     <button className='btn dropdown-item'  onClick={()=>{this.resetFilters()}}>Reset</button>
