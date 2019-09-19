@@ -295,7 +295,7 @@ class Main extends Component {
                                                                     <input
                                                                         type="number"
                                                                         inputMode="numeric"
-                                                                        pattern="\\d*" 
+                                                                        pattern="\d*" 
                                                                         className="form-control"
                                                                         name="minRangeLikes"
                                                                         value={this.props.ui.minRangeLikes}
@@ -307,7 +307,7 @@ class Main extends Component {
                                                                     <input
                                                                         type="number"
                                                                         inputMode="numeric"
-                                                                        pattern="\\d*"
+                                                                        pattern="\d*"
                                                                         className="form-control"
                                                                         name="maxRangeLikes"
                                                                         value={this.props.ui.maxRangeLikes}
@@ -325,7 +325,7 @@ class Main extends Component {
                                                                     <label htmlFor="minRangeViews">MIN <NumberFormat value={this.props.ui.minRangeViews} displayType={'text'} thousandSeparator={true} /></label>
                                                                     <input
                                                                         type="number"
-                                                                        pattern="\\d*"
+                                                                        pattern="\d*"
                                                                         inputMode="numeric"
                                                                         className="form-control"
                                                                         name="minRangeViews"
@@ -337,7 +337,7 @@ class Main extends Component {
                                                                     <label htmlFor="maxRangeViews">MAX <NumberFormat value={this.props.ui.maxRangeViews} displayType={'text'} thousandSeparator={true} /></label>
                                                                     <input
                                                                         type="number"
-                                                                        pattern="\\d*"
+                                                                        pattern="\d*"
                                                                         inputMode="numeric"
                                                                         className="form-control"
                                                                         name="maxRangeViews"
