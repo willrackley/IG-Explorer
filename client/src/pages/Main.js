@@ -261,7 +261,6 @@ class Main extends Component {
                 <div className='container-fluid'>
                     <div className='row no-gutters'>
                         <div className=''>
-
                         </div>
                         <div className='col-md-12'>
                             <div className="mt-4 mb-3 text-center">
