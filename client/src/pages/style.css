@@ -33,6 +33,7 @@
     height: 400px;
 }
 
+/* smartphone width */
 @media screen and (max-width: 425px){
     .card  {
         border: 2px solid #dfdfdf;
