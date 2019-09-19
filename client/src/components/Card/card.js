@@ -82,9 +82,7 @@ class cards extends React.Component {
                     }
                     {result.edge_media_to_caption.edges[0] ? <span><span className="font-weight-bold">{result.owner.username}</span>
                     {` ${result.edge_media_to_caption.edges[0].node.text}`}</span> : <span><span className="font-weight-bold">{result.owner.username}</span><span className="text-muted">{` *Post has no caption*`}</span></span>}
-                    {/* <Button  data-toggle="modal" data-target={`#myModal${result.id}`}>
-                    button
-                </Button> */}
+                    
                 </div>
             </div>
 
