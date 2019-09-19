@@ -28,3 +28,28 @@
 .mainHeadingText {
     font-family: 'Roboto', sans-serif;
 }
+
+.groupSearchBox {
+    height: 400px;
+}
+
+@media screen and (max-width: 425px){
+    .card  {
+        border: 2px solid #dfdfdf;
+    }
+
+    .card:hover {
+        border: 2px solid #FCE6CE;
+    }
+
+    .groupSearchBox {
+        height: 100px;
+    }
+
+    .catBtns {
+        border: 2px solid rgb(218, 218, 218);
+        border-radius: 5px;
+        width: 50% !important;
+        height: 50%;
+    }
+}

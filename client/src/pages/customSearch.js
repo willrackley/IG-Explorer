@@ -276,7 +276,7 @@ class customSearch extends Component {
                     </div> 
                 </Nav>
                 <div className="container">
-                    <div className='row my-5'>
+                    <div className='row my-5 flex-column-reverse flex-lg-row'>
                         <div className='col-md-8 border-right col-sm-12'>
                             <h3 className="text-muted mb-3">Search</h3>
                             <form onSubmit={(event) => {event.preventDefault(); this.submitSearch();}}>
@@ -399,13 +399,14 @@ class customSearch extends Component {
                                 <div className="text-danger mb-2">
                                     {this.state.inflErrorMessage}
                                 </div>
-                                <div className="border mb-3" style={{height: 300}}>
-                                    <List>
+                                <div className="border mb-3 groupSearchBox overflow-auto">
+                                    {this.props.auth.userData.influencers.length ? <List>
                                         {this.props.auth.userData.influencers.map((result => (
-                                        <div key={result.influencer} className="text-left p-1 ml-1">                    {result.influencer}
-                                            <button className="btn btn-primary" onClick={() => this.deleteSavedInfluencer(result.influencer)}>&times;</button>
+                                        <div key={result.influencer} className="text-left bg-light mb-1">                    
+                                            <button className="btn mb-1 " onClick={() => this.deleteSavedInfluencer(result.influencer)}>&times;</button> {result.influencer}
                                         </div>)))}
-                                    </List>
+                                    </List> : <div className="text-muted mt-1 text-center"> *** no influencers added ***</div>}
+                                    
                                 </div>
                                 <button onClick={() => this.groupSearch()} className="btn btn-primary">{this.state.isLoadingGroupSearch ? <div className='text-center'><div className="spinner-border spinner-border-sm" role="status">
                                     <span className="sr-only">Loading...</span>
