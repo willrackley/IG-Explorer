@@ -295,6 +295,7 @@ class Main extends Component {
                                                                     <label htmlFor="minRangeLikes">MIN <NumberFormat value={this.props.ui.minRangeLikes} displayType={'text'} thousandSeparator={true} /></label>
                                                                     <input
                                                                         type="number"
+                                                                        inputMode="numeric"
                                                                         pattern="\\d*" 
                                                                         className="form-control"
                                                                         name="minRangeLikes"
@@ -306,6 +307,7 @@ class Main extends Component {
                                                                     <label htmlFor="maxRangeLikes">MAX <NumberFormat value={this.props.ui.maxRangeLikes} displayType={'text'} thousandSeparator={true} /></label>
                                                                     <input
                                                                         type="number"
+                                                                        inputMode="numeric"
                                                                         pattern="\\d*"
                                                                         className="form-control"
                                                                         name="maxRangeLikes"
@@ -325,6 +327,7 @@ class Main extends Component {
                                                                     <input
                                                                         type="number"
                                                                         pattern="\\d*"
+                                                                        inputMode="numeric"
                                                                         className="form-control"
                                                                         name="minRangeViews"
                                                                         value={this.props.ui.minRangeViews}
@@ -336,6 +339,7 @@ class Main extends Component {
                                                                     <input
                                                                         type="number"
                                                                         pattern="\\d*"
+                                                                        inputMode="numeric"
                                                                         className="form-control"
                                                                         name="maxRangeViews"
                                                                         value={this.props.ui.maxRangeViews}
@@ -346,7 +350,7 @@ class Main extends Component {
                                                         </div>
                                                     </div>
                                                 </li>
-                                                
+
                                                 {/* <li className="dropdown-item">Category</li> */}
                                                 <div className='d-inline-flex resetbutton'>
                                                     <button className='btn dropdown-item'  onClick={()=>{this.resetFilters()}}>Reset</button>
