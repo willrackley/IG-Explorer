@@ -56,7 +56,6 @@ class customSearch extends Component {
     }
 
     handleInputChange = (event) => {
-        
         const { name, value } = event.target;
 
         if (name === "usernameInput" || name === "GSusernameInput") {
