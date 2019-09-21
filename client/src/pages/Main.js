@@ -439,9 +439,9 @@ class Main extends Component {
                                                 </li>
 
                                                 {/* <li className="dropdown-item">Category</li> */}
-                                                <div className="w-100">
+                                                
                                                     <form>
-                                                    <div className='d-inline-flex resetbutton justify-content-center'>
+                                                    <div className='d-inline-flex resetbutton '>
                                                         <button className='btn dropdown-item'  onClick={(event)=>{this.resetFilters()
                                                         event.stopPropagation()
                                                         event.preventDefault();}}>Reset</button>
@@ -450,8 +450,7 @@ class Main extends Component {
                                                         event.preventDefault();}}>Save</button>
                                                         </div>
                                                     </form>
-                                                </div>
-                                                
+                                               
                                             </ul>
                                         
 
