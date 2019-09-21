@@ -159,7 +159,6 @@ class Main extends Component {
     handleCheckboxChange = id => {
         this.setState({ allUnchecked: false})
         checkedInflArr = []
-        //let thisBox = document.getElementById(id)
         let checkedBoxItem= document.getElementsByClassName('checks')
         //let allBox= document.getElementById('allCheckBox')
        
