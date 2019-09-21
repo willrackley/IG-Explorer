@@ -160,7 +160,6 @@ class Main extends Component {
         this.setState({ allUnchecked: false})
         checkedInflArr = []
         let checkedBoxItem= document.getElementsByClassName('checks')
-        //let allBox= document.getElementById('allCheckBox')
        
         for (let i=0; i < this.props.scrapedPosts.influencers.length; i++){
             if (checkedBoxItem[i].checked) {
