@@ -1,4 +1,4 @@
-import { SCRAPE_POSTS, LOAD_MORE_COUNTS, RESET_COUNT, LOAD_MORE_ALL, LOAD_MORE_VID, LOAD_MORE_IMG, UNFOUND_USER, RESET_UNFOUND_USER } from '../actions/types';
+import { SCRAPE_POSTS, LOAD_MORE_COUNTS, RESET_COUNT, LOAD_MORE_ALL, LOAD_MORE_VID, LOAD_MORE_IMG, UNFOUND_USER, RESET_UNFOUND_USER, GET_INFLUENCERS, RESET_INFLUENCERS } from '../actions/types';
 
 const initialState = {
     filteredResults: [],
@@ -7,6 +7,7 @@ const initialState = {
     allResults: [],
     hasMore: false,
     counts: 10,
+    influencers: [],
     unfoundUser: [] 
 }
 
@@ -25,6 +26,16 @@ const scrapePostReducer = (state = initialState, action) => {
             return {
                 ...state,
                 counts: action.counts
+            }
+        case RESET_INFLUENCERS: 
+            return {
+                ...state,
+                influencers: []
+            }
+        case GET_INFLUENCERS: 
+            return {
+                ...state,
+                influencers: action.influencers
             }
         case LOAD_MORE_ALL: 
             if (state.counts > state.allResults.length) {

@@ -11,7 +11,7 @@ import { IoIosSearch } from 'react-icons/io';
 import { IoMdPerson } from 'react-icons/io';
 import { confirmAlert } from 'react-confirm-alert'; 
 import Nav from '../components/Nav/nav'
-import { getUserData, getScrapedPosts, loadMoreCounts, loadMoreAll, resetCount, loadMoreImg, loadMoreVid, setRange, resetRange, authSetToken, logout } from '../actions'
+import { getUserData, getScrapedPosts, loadMoreCounts, loadMoreAll, resetCount, loadMoreImg, loadMoreVid, setRange, resetRange, authSetToken, logout, filteredInfluencers } from '../actions'
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import NumberFormat from 'react-number-format';
@@ -21,6 +21,7 @@ let vidResultsArr = [];
 let imgResultsArr = [];
 let allResultsArr = [];
 let influencerArr = [];
+let checkedInflArr = []
 let counts = 10;
 
 
@@ -50,6 +51,9 @@ class Main extends Component {
         },
         savedStyle: null,
         cardId: null,
+        influencerCheckList: [],
+        allUnchecked: false,
+        checkedBtn: null,
         hashtags: ['music','rap','hiphop','beatmaker', 'raps', 'instarap', 'hiphopmusic', 'newrappers', 'song','musician','musicvideo', 'bestsongs', 'newsong', 'singing', 'instagrammusic', 'songs', 'guitar', 'slowsong', 'mixing', 'protools', 'singer', 'topsongs', 'popmusic', 'vocalist', 'producerlife', 'flstudio','production', 'beatmaking']
     }
     componentDidMount() {
@@ -61,7 +65,6 @@ class Main extends Component {
         } else {
             this.props.getScrapedPosts();
         }
-        
     }
 
     fetchPostData = () => {
@@ -153,9 +156,62 @@ class Main extends Component {
         this.props.setRange(name, value)
     };
 
-    submitFilters = () => {
-        this.props.resetCount();
-        this.props.getScrapedPosts();
+    handleCheckboxChange = id => {
+        this.setState({ allUnchecked: false})
+        checkedInflArr = []
+        //let thisBox = document.getElementById(id)
+        let checkedBoxItem= document.getElementsByClassName('checks')
+        //let allBox= document.getElementById('allCheckBox')
+       
+        for (let i=0; i < this.props.scrapedPosts.influencers.length; i++){
+            if (checkedBoxItem[i].checked) {
+                checkedInflArr.push(checkedBoxItem[i].defaultValue)
+            }
+        }
+        
+    }
+
+    
+    handleAllChecked = (name) => {
+        
+        checkedInflArr = [];
+        let checkedBoxItem= document.getElementsByClassName('checks')
+        if (name === "checkAll") {
+            this.setState({ checkedBtn: "checkAll" })
+            for (let i=0; i < this.props.scrapedPosts.influencers.length; i++){
+                    checkedBoxItem[i].checked = true
+                    if (checkedBoxItem[i].checked) {
+                        checkedInflArr.push(checkedBoxItem[i].defaultValue)
+                        this.setState({ allUnchecked: false})
+                    }
+            }
+          
+        } else {
+            this.setState({ checkedBtn: "uncheckAll" })
+            for (let i=0; i < this.props.scrapedPosts.influencers.length; i++){
+                checkedInflArr = [];
+                checkedBoxItem[i].checked = false
+                this.setState({ allUnchecked: true })
+            }   
+        }
+    }
+
+     submitFilters = () => {
+        if (!checkedInflArr.length) {
+            let checkedBoxItem= document.getElementsByClassName('checks')
+            for (let i=0; i < this.props.scrapedPosts.influencers.length; i++){
+                if (checkedBoxItem[i].checked) {
+                    checkedInflArr.push(checkedBoxItem[i].defaultValue)
+                }
+            }
+            this.props.resetCount();
+            this.props.filteredInfluencers(checkedInflArr) 
+        } else {
+            this.props.resetCount();
+            this.props.filteredInfluencers(checkedInflArr)
+        }
+        
+        
     }
 
     resetFilters = () => {
@@ -236,7 +292,6 @@ class Main extends Component {
     }
 
     render() {
-    
         //prevents scrolling the number in filter form
         window.$(document).on("wheel", "input[type=number]", function (e) {
             window.$(this).blur();
@@ -284,7 +339,7 @@ class Main extends Component {
                                                 filter
                                             </button>
 
-                                            <ul className="dropdown-menu" aria-labelledby="filterDropdown">
+                                            <ul className="dropdown-menu overflow-auto" aria-labelledby="filterDropdown" style={{height: 400}}>
                                                 <li className="dropdown-item">
                                                     <div className="filterSection mb-3">
                                                         <h5 className="text-primary">Likes</h5>
@@ -344,12 +399,58 @@ class Main extends Component {
                                                             </form>
                                                         </div>
                                                     </div>
+                                                    <div className="filterSection mb-3">
+                                                        <h5 className="text-primary">Artist</h5>
+                                                        <div className="row mb-3">
+                                                            <div className="col-6 border-right">
+                                                                <form>
+                                                                    <button onClick={(event) => {this.handleAllChecked('checkAll')
+                                                                        event.stopPropagation();
+                                                                        event.preventDefault();}}className="btn ">Check All</button> 
+                                                                </form>
+                                                            </div>
+                                                            <div className="col-6">
+                                                                <form>
+                                                                <button onClick={(event) => {this.handleAllChecked('uncheckAll')
+                                                                    event.stopPropagation();
+                                                                    event.preventDefault();}} className="btn">Uncheck All</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <form>
+                                                                {/* <div className="form-check mb-2">
+                                                                    <input className="form-check-input" type="checkbox" defaultChecked={false} 
+                                                                    value="all" id="allCheckBox" onChange={()=>this.handleCheckboxChange("allCheckBox")}/>
+                                                                    <label className="form-check-label" htmlFor="defaultCheck1">
+                                                                        All
+                                                                    </label>
+                                                                </div> */}
+                                                                {this.props.scrapedPosts.influencers.map((result,index) => (
+                                                                <div key={result._id} className="form-check mb-2">
+                                                                    <input className="form-check-input checks" type="checkbox" value={result.igName} onChange={()=>this.handleCheckboxChange(result.igName)} defaultChecked={result.checked} id={result.igName} />
+                                                                    <label className="form-check-label" htmlFor={result.igName}>
+                                                                        {result.igName}
+                                                                    </label>
+                                                                </div>
+                                                                ))}
+                                                            </form>
+                                                        </div>
+                                                    </div>
                                                 </li>
 
                                                 {/* <li className="dropdown-item">Category</li> */}
-                                                <div className='d-inline-flex resetbutton'>
-                                                    <button className='btn dropdown-item'  onClick={()=>{this.resetFilters()}}>Reset</button>
-                                                    <button className='btn dropdown-item' onClick={()=>this.submitFilters()}>Save</button>
+                                                <div className="w-100">
+                                                    <form>
+                                                    <div className='d-inline-flex resetbutton justify-content-center'>
+                                                        <button className='btn dropdown-item'  onClick={(event)=>{this.resetFilters()
+                                                        event.stopPropagation()
+                                                        event.preventDefault();}}>Reset</button>
+                                                        <button className='btn dropdown-item' disabled={this.state.allUnchecked} onClick={(event)=>{this.submitFilters()
+                                                        event.stopPropagation();
+                                                        event.preventDefault();}}>Save</button>
+                                                        </div>
+                                                    </form>
                                                 </div>
                                                 
                                             </ul>
@@ -422,6 +523,7 @@ const mapDispatchToProps = dispatch => {
         resetCount: () => dispatch(resetCount()),
         setRange: (name, value) => dispatch(setRange(name, value)),
         resetRange: () => dispatch(resetRange()),
+        filteredInfluencers: (influencers) => dispatch(filteredInfluencers(influencers)),
         logout: () => dispatch(logout())
     }
 }

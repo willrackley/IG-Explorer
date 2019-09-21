@@ -1,22 +1,76 @@
 /* eslint-disable no-loop-func */
 import axios from 'axios';
-import { SCRAPE_POSTS, RESET_COUNT, LOAD_MORE_COUNTS, LOAD_MORE_ALL, LOAD_MORE_IMG, LOAD_MORE_VID, UNFOUND_USER, RESET_UNFOUND_USER } from './types'
+import { SCRAPE_POSTS, RESET_COUNT, LOAD_MORE_COUNTS, LOAD_MORE_ALL, LOAD_MORE_IMG, LOAD_MORE_VID, UNFOUND_USER, RESET_UNFOUND_USER, GET_INFLUENCERS, RESET_INFLUENCERS } from './types'
 import { uiStartLoading, uiStopLoading } from './index'
 let influencerArr = [];
 let allResultsArr = [];
 let vidResultsArr = [];
 let imgResultsArr = [];
+let inflStateArr = [];
 
 export const getScrapedPosts = () => {
     influencerArr = [];
+    inflStateArr = [];
     return dispatch => {
         axios.get('/api/influencers')
         .then(res => {
             for (let i = 0; i < res.data.length; i++) {
                 influencerArr.push(res.data[i].igName)
+                res.data[i].checked = true;
+                inflStateArr.push(res.data[i])
             }
+            dispatch(getInfluencersList(inflStateArr))
             dispatch(prelimFetch());
         })   
+    }
+}
+
+export const filteredInfluencers = (influencers) => {
+    influencerArr = [];
+    inflStateArr = [];
+    for (let i=0; i < influencers.length; i++) {
+        influencerArr.push(influencers[i]);
+    }
+    
+    axios.get('/api/influencers')
+        .then(res => {
+            for (let j = 0; j < res.data.length; j++) {
+                res.data[j].checked = false;
+                inflStateArr.push(res.data[j])   
+            }
+            for (let k = 0; k < inflStateArr.length; k++) {
+                for (let m=0; m < influencers.length; m++) {
+                    if(inflStateArr[k].igName === influencers[m]) {
+                        inflStateArr[k].checked = true;
+                    }
+                }
+            }
+            
+        })   
+    
+    return async(dispatch) => {
+        await dispatch(resetInfluencers())
+        allResultsArr = [];
+        vidResultsArr = [];
+        imgResultsArr = [];
+        dispatch(uiStartLoading())
+        dispatch(getInfluencersList(inflStateArr))
+        await dispatch(getInfluencerPosts())
+        await new Promise((resolve, reject) => setTimeout(resolve, 2000));
+        dispatch(asyncedFetch())
+    }
+}
+
+export const resetInfluencers = () => {
+    return {
+        type: RESET_INFLUENCERS
+    }
+}
+
+export const getInfluencersList = (list) => {
+    return {
+        type: GET_INFLUENCERS,
+        influencers: list
     }
 }
 
@@ -27,14 +81,14 @@ export const getInfluencerPosts =()=> {
         let maxRangeLikes = getState().ui.maxRangeLikes;
         let minRangeViews = getState().ui.minRangeViews;
         let maxRangeViews = getState().ui.maxRangeViews;
-        
 
         for  (let i = 0; i < influencerArr.length; i++) {
+            
             axios.get(`/api/scrape/${influencerArr[i]}`)
             .then(res => {
                 if(res.data === 'error') {
                     let lostUser = {index: [i+1], user: influencerArr[i]};
-                    //console.log(influencerArr[i])
+                    
                     dispatch(unfoundUser(lostUser))
                     
                 } else {

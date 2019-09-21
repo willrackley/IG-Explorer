@@ -59,7 +59,7 @@ class cards extends React.Component {
     return (
         <div className="card-deck p-1">
             {this.props.results.map((result,index) => (
-            <div className="mainCards card mt-2 mb-5" style={{ minWidth: '16rem'}} key={result.id}  >
+            <div className="mainCards card mt-2 mb-5" style={{ minWidth: '16rem', maxWidth: '18em'}} key={result.id}  >
                 {result.is_video ? <div className="p-3 card-title title"><div className='row'><div className='col-md-10 col-sm-12'><span className='pt-1 font-weight-bold'>{`@${result.owner.username}`}</span></div><div className='col-md-2 col-sm-12 '><span className=''><IoIosVideocam style={{color: "#428bca"}} size={30}/></span></div></div></div> : <div className="p-3 card-title title"><div className='row'><div className='col-md-10 col-sm-12'><span className='pt-1 font-weight-bold'>{`@${result.owner.username}`}</span></div><div className='col-md-2 col-sm-12 text-sm-lefts'><span className=''><IoIosCamera style={{color: "#428bca"}} size={30}/></span></div></div></div>}
 
                 
