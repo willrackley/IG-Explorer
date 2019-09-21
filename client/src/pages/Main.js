@@ -214,8 +214,8 @@ class Main extends Component {
 
     resetFilters = () => {
         confirmAlert({
-        title: 'You are about to reset the filters to their default setting',
-        message: 'Are you sure to do this?',
+        title: `reset?`,
+        message: '',
         buttons: [
           {
             label: 'Yes',
@@ -400,14 +400,14 @@ class Main extends Component {
                                                     <div className="filterSection mb-3">
                                                         <h5 className="text-primary">Artist</h5>
                                                         <div className="row mb-3">
-                                                            <div className="col-6 border-right">
+                                                            <div className="col-md-6 col-sm-12 border-right">
                                                                 <form>
                                                                     <button onClick={(event) => {this.handleAllChecked('checkAll')
                                                                         event.stopPropagation();
                                                                         event.preventDefault();}}className="btn ">Check All</button> 
                                                                 </form>
                                                             </div>
-                                                            <div className="col-6">
+                                                            <div className="col-md-6 col-sm-12">
                                                                 <form>
                                                                 <button onClick={(event) => {this.handleAllChecked('uncheckAll')
                                                                     event.stopPropagation();
